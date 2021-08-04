@@ -1,0 +1,19 @@
+---
+title: "ParalympicMedals"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tidytuesdayR)
+```
+
+```{r}
+athletes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-03/athletes.csv')
+```
+```{r}
+athletes
+```
+
+
