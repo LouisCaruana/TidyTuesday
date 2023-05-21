@@ -56,41 +56,125 @@ DogDataTidy <- RankTidy %>% full_join(TraitsTidy)
 ``` r
 DogDataTidy %>% filter(Breed %in% c('Retrievers (Labrador)',
                       'Pointers (German Shorthaired)', 
-                      'Australian Shepherds',
                       'Great Danes',
-                      'Doberman Pinschers',
                       'Border Collies',
                       'Vizslas',
                       'Rhodesian Ridgebacks',
-                      'Irish Wolfhounds',
-                      'Greater Swiss Mountain Dogs',
-                      'Retrievers (Flat-Coated)',
                       'Pointers',
                       'Greyhounds')) %>%
-  select(-'number', -'Coat Type', -'Coat Length' ) -> DogDataTidy
+  select(-'number',
+         -'Coat Type',
+         -'Coat Length',
+         -'Mental Stimulation Needs') %>%
+  rename('Affectionate' = 'Affectionate With Family') %>%
+  rename('Child Friendly' = 'Good With Young Children') %>%
+  rename('Dog Friendly' = 'Good With Other Dogs') %>%
+  rename('Stranger Friendly' = 'Openness To Strangers') %>%
+  rename('Playfulness' = 'Playfulness Level') %>%
+  rename('Grooming Needs' = 'Coat Grooming Frequency') %>%
+  rename('Watchdog Nature' = 'Watchdog/Protective Nature') %>%
+  rename('Adaptability' = 'Adaptability Level') %>%
+  rename('Trainability' = 'Trainability Level') -> DogDataTidy
+
+
 DogDataTidy
 ```
 
-    ## # A tibble: 13 × 15
-    ##    Breed    Affectionate With Fa…¹ Good With Young Chil…² `Good With Other Dogs`
-    ##    <chr>                     <dbl>                  <dbl>                  <dbl>
-    ##  1 Retriev…                      5                      5                      5
-    ##  2 Pointer…                      5                      5                      4
-    ##  3 Austral…                      3                      5                      3
-    ##  4 Great D…                      5                      3                      3
-    ##  5 Doberma…                      5                      5                      3
-    ##  6 Border …                      5                      3                      3
-    ##  7 Vizslas                       5                      5                      4
-    ##  8 Rhodesi…                      5                      5                      3
-    ##  9 Irish W…                      5                      3                      4
-    ## 10 Greater…                      5                      5                      3
-    ## 11 Retriev…                      5                      5                      5
-    ## 12 Pointers                      5                      3                      5
-    ## 13 Greyhou…                      4                      3                      4
-    ## # ℹ abbreviated names: ¹​`Affectionate With Family`, ²​`Good With Young Children`
-    ## # ℹ 11 more variables: `Shedding Level` <dbl>, `Coat Grooming Frequency` <dbl>,
-    ## #   `Drooling Level` <dbl>, `Openness To Strangers` <dbl>,
-    ## #   `Playfulness Level` <dbl>, `Watchdog/Protective Nature` <dbl>,
-    ## #   `Adaptability Level` <dbl>, `Trainability Level` <dbl>,
-    ## #   `Energy Level` <dbl>, `Barking Level` <dbl>,
-    ## #   `Mental Stimulation Needs` <dbl>
+    ## # A tibble: 8 × 14
+    ##   Breed            Affectionate `Child Friendly` `Dog Friendly` `Shedding Level`
+    ##   <chr>                   <dbl>            <dbl>          <dbl>            <dbl>
+    ## 1 Retrievers (Lab…            5                5              5                4
+    ## 2 Pointers (Germa…            5                5              4                3
+    ## 3 Great Danes                 5                3              3                3
+    ## 4 Border Collies              5                3              3                3
+    ## 5 Vizslas                     5                5              4                3
+    ## 6 Rhodesian Ridge…            5                5              3                3
+    ## 7 Pointers                    5                3              5                3
+    ## 8 Greyhounds                  4                3              4                2
+    ## # ℹ 9 more variables: `Grooming Needs` <dbl>, `Drooling Level` <dbl>,
+    ## #   `Stranger Friendly` <dbl>, Playfulness <dbl>, `Watchdog Nature` <dbl>,
+    ## #   Adaptability <dbl>, Trainability <dbl>, `Energy Level` <dbl>,
+    ## #   `Barking Level` <dbl>
+
+``` r
+DogDataTidy %>%
+  pivot_longer(!Breed, names_to = 'Trait', values_to = 'count') -> DogDataLong
+
+DogDataLong
+```
+
+    ## # A tibble: 104 × 3
+    ##    Breed                 Trait             count
+    ##    <chr>                 <chr>             <dbl>
+    ##  1 Retrievers (Labrador) Affectionate          5
+    ##  2 Retrievers (Labrador) Child Friendly        5
+    ##  3 Retrievers (Labrador) Dog Friendly          5
+    ##  4 Retrievers (Labrador) Shedding Level        4
+    ##  5 Retrievers (Labrador) Grooming Needs        2
+    ##  6 Retrievers (Labrador) Drooling Level        2
+    ##  7 Retrievers (Labrador) Stranger Friendly     5
+    ##  8 Retrievers (Labrador) Playfulness           5
+    ##  9 Retrievers (Labrador) Watchdog Nature       3
+    ## 10 Retrievers (Labrador) Adaptability          5
+    ## # ℹ 94 more rows
+
+``` r
+DogPlot = function(x, y=''){x %>%
+  ggplot(aes(Trait, count)) +
+  geom_col(fill = "lightgray",
+           color = "black") +
+  coord_polar() +
+  labs(title = y,) +
+  theme_minimal() +
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text = element_text(face="bold")) +
+  ylab("") +
+  xlab("") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10))
+}
+```
+
+``` r
+DogDataLong %>%
+  filter(Breed == 'Retrievers (Labrador)') %>%
+DogPlot(y='Labrador') -> p1
+
+DogDataLong %>%
+  filter(Breed == 'Pointers (German Shorthaired)') %>%
+DogPlot(y='German Shorthaired Pointer') -> p2
+
+DogDataLong %>%
+  filter(Breed == 'Great Danes') %>%
+DogPlot(y='Great Dane') -> p3
+
+DogDataLong %>%
+  filter(Breed == 'Border Collies') %>%
+DogPlot(y='Border Collie') -> p4
+
+DogDataLong %>%
+  filter(Breed == 'Vizslas') %>%
+DogPlot(y='Vizsla') -> p5
+
+DogDataLong %>%
+  filter(Breed == 'Rhodesian Ridgebacks') %>%
+DogPlot(y='Rhodesian Ridgeback') -> p6
+
+DogDataLong %>%
+  filter(Breed == 'Pointers') %>%
+DogPlot(y='English Pointers') -> p7
+
+DogDataLong %>%
+  filter(Breed == 'Greyhounds') %>%
+DogPlot(y='Greyhound') -> p8
+```
+
+``` r
+(p7 | p2 | p5 | p1) /
+(p6 | p4 | p3 | p8) + plot_annotation(
+  title = 'A Trait Comparison of Georgias Favorite Dog Breeds',
+  caption = 'Twitter: @Louis_Caruana\nData: American Kennel Club',
+  theme = theme(plot.title = element_text(size = 30)))
+```
+
+![](20220201_DogBreeds_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->

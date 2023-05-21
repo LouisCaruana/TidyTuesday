@@ -6,6 +6,7 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(patchwork)
 ```
 
 ```{r}
@@ -30,29 +31,95 @@ DogDataTidy <- RankTidy %>% full_join(TraitsTidy)
 ```{r}
 DogDataTidy %>% filter(Breed %in% c('Retrievers (Labrador)',
                       'Pointers (German Shorthaired)', 
-                      'Australian Shepherds',
                       'Great Danes',
-                      'Doberman Pinschers',
                       'Border Collies',
                       'Vizslas',
                       'Rhodesian Ridgebacks',
-                      'Irish Wolfhounds',
-                      'Greater Swiss Mountain Dogs',
-                      'Retrievers (Flat-Coated)',
                       'Pointers',
                       'Greyhounds')) %>%
-  select(-'number', -'Coat Type', -'Coat Length' ) -> DogDataTidy
+  select(-'number',
+         -'Coat Type',
+         -'Coat Length',
+         -'Mental Stimulation Needs') %>%
+  rename('Affectionate' = 'Affectionate With Family') %>%
+  rename('Child Friendly' = 'Good With Young Children') %>%
+  rename('Dog Friendly' = 'Good With Other Dogs') %>%
+  rename('Stranger Friendly' = 'Openness To Strangers') %>%
+  rename('Playfulness' = 'Playfulness Level') %>%
+  rename('Grooming Needs' = 'Coat Grooming Frequency') %>%
+  rename('Watchdog Nature' = 'Watchdog/Protective Nature') %>%
+  rename('Adaptability' = 'Adaptability Level') %>%
+  rename('Trainability' = 'Trainability Level') -> DogDataTidy
+
+
 DogDataTidy
 ```
 
 
+```{r}
+DogDataTidy %>%
+  pivot_longer(!Breed, names_to = 'Trait', values_to = 'count') -> DogDataLong
 
+DogDataLong
+```
+```{r}
+DogPlot = function(x, y=''){x %>%
+  ggplot(aes(Trait, count)) +
+  geom_col(fill = "lightgray",
+           color = "black") +
+  coord_polar() +
+  labs(title = y,) +
+  theme_minimal() +
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text = element_text(face="bold")) +
+  ylab("") +
+  xlab("") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10))
+}
 
+```
 
+```{r}
+DogDataLong %>%
+  filter(Breed == 'Retrievers (Labrador)') %>%
+DogPlot(y='Labrador') -> p1
 
+DogDataLong %>%
+  filter(Breed == 'Pointers (German Shorthaired)') %>%
+DogPlot(y='German Shorthaired Pointer') -> p2
 
+DogDataLong %>%
+  filter(Breed == 'Great Danes') %>%
+DogPlot(y='Great Dane') -> p3
 
+DogDataLong %>%
+  filter(Breed == 'Border Collies') %>%
+DogPlot(y='Border Collie') -> p4
 
+DogDataLong %>%
+  filter(Breed == 'Vizslas') %>%
+DogPlot(y='Vizsla') -> p5
+
+DogDataLong %>%
+  filter(Breed == 'Rhodesian Ridgebacks') %>%
+DogPlot(y='Rhodesian Ridgeback') -> p6
+
+DogDataLong %>%
+  filter(Breed == 'Pointers') %>%
+DogPlot(y='English Pointers') -> p7
+
+DogDataLong %>%
+  filter(Breed == 'Greyhounds') %>%
+DogPlot(y='Greyhound') -> p8
+```
+```{r fig.height=12, fig.width=24}
+(p7 | p2 | p5 | p1) /
+(p6 | p4 | p3 | p8) + plot_annotation(
+  title = 'A Trait Comparison of Georgias Favorite Dog Breeds',
+  caption = 'Twitter: @Louis_Caruana\nData: American Kennel Club',
+  theme = theme(plot.title = element_text(size = 30)))
+```
 
 
 
