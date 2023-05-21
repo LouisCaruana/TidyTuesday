@@ -59,48 +59,38 @@ DogDataTidy %>% filter(Breed %in% c('Retrievers (Labrador)',
                       'Australian Shepherds',
                       'Great Danes',
                       'Doberman Pinschers',
-                      'Bernese Mountain Dogs',
-                      'Spaniels (Cocker)',
                       'Border Collies',
                       'Vizslas',
-                      'Collies',
-                      'Newfoundlands',
                       'Rhodesian Ridgebacks',
-                      'Spaniels (English Cocker)',
-                      'Pointers (German Wirehaired)',
-                      'Old English Sheepdogs',
                       'Irish Wolfhounds',
-                      'Setters (Irish)',
                       'Greater Swiss Mountain Dogs',
                       'Retrievers (Flat-Coated)',
-                      'Setters (Gordon)',
                       'Pointers',
-                      'Afghan Hounds',
-                      'Black and Tan Coonhounds',
-                      'Greyhounds',
-                      'Redbone Coonhounds',
-                      'Entlebucher Mountain Dogs',
-                      'Scottish Deerhounds')) -> DogDataTidy
+                      'Greyhounds')) %>%
+  select(-'number', -'Coat Type', -'Coat Length' ) -> DogDataTidy
 DogDataTidy
 ```
 
-    ## # A tibble: 27 × 18
-    ##    Breed                    number Affectionate With Fa…¹ Good With Young Chil…²
-    ##    <chr>                     <int>                  <dbl>                  <dbl>
-    ##  1 Retrievers (Labrador)         1                      5                      5
-    ##  2 Pointers (German Shorth…      9                      5                      5
-    ##  3 Australian Shepherds         12                      3                      5
-    ##  4 Great Danes                  15                      5                      3
-    ##  5 Doberman Pinschers           18                      5                      5
-    ##  6 Bernese Mountain Dogs        22                      5                      5
-    ##  7 Spaniels (Cocker)            30                      4                      5
-    ##  8 Border Collies               32                      5                      3
-    ##  9 Vizslas                      35                      5                      5
-    ## 10 Collies                      40                      4                      5
-    ## # ℹ 17 more rows
+    ## # A tibble: 13 × 15
+    ##    Breed    Affectionate With Fa…¹ Good With Young Chil…² `Good With Other Dogs`
+    ##    <chr>                     <dbl>                  <dbl>                  <dbl>
+    ##  1 Retriev…                      5                      5                      5
+    ##  2 Pointer…                      5                      5                      4
+    ##  3 Austral…                      3                      5                      3
+    ##  4 Great D…                      5                      3                      3
+    ##  5 Doberma…                      5                      5                      3
+    ##  6 Border …                      5                      3                      3
+    ##  7 Vizslas                       5                      5                      4
+    ##  8 Rhodesi…                      5                      5                      3
+    ##  9 Irish W…                      5                      3                      4
+    ## 10 Greater…                      5                      5                      3
+    ## 11 Retriev…                      5                      5                      5
+    ## 12 Pointers                      5                      3                      5
+    ## 13 Greyhou…                      4                      3                      4
     ## # ℹ abbreviated names: ¹​`Affectionate With Family`, ²​`Good With Young Children`
-    ## # ℹ 14 more variables: `Good With Other Dogs` <dbl>, `Shedding Level` <dbl>,
-    ## #   `Coat Grooming Frequency` <dbl>, `Drooling Level` <dbl>, `Coat Type` <chr>,
-    ## #   `Coat Length` <chr>, `Openness To Strangers` <dbl>,
+    ## # ℹ 11 more variables: `Shedding Level` <dbl>, `Coat Grooming Frequency` <dbl>,
+    ## #   `Drooling Level` <dbl>, `Openness To Strangers` <dbl>,
     ## #   `Playfulness Level` <dbl>, `Watchdog/Protective Nature` <dbl>,
-    ## #   `Adaptability Level` <dbl>, `Trainability Level` <dbl>, …
+    ## #   `Adaptability Level` <dbl>, `Trainability Level` <dbl>,
+    ## #   `Energy Level` <dbl>, `Barking Level` <dbl>,
+    ## #   `Mental Stimulation Needs` <dbl>
