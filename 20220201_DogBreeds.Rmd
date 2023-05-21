@@ -1,0 +1,73 @@
+---
+title: "Dog Breeds"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+breed_traits <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-02-01/breed_traits.csv')
+trait_description <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-02-01/trait_description.csv')
+breed_rank_all <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-02-01/breed_rank.csv')
+
+```
+
+```{r}
+breed_traits %>%
+  mutate(number = row_number()) %>%
+  select(-'Breed') -> TraitsTidy
+
+breed_rank_all %>%
+  mutate(number = row_number()) %>%
+  select('Breed', 'number')-> RankTidy 
+
+DogDataTidy <- RankTidy %>% full_join(TraitsTidy)
+
+
+```
+
+```{r}
+DogDataTidy %>% filter(Breed %in% c('Retrievers (Labrador)',
+                      'Pointers (German Shorthaired)', 
+                      'Australian Shepherds',
+                      'Great Danes',
+                      'Doberman Pinschers',
+                      'Bernese Mountain Dogs',
+                      'Spaniels (Cocker)',
+                      'Border Collies',
+                      'Vizslas',
+                      'Collies',
+                      'Newfoundlands',
+                      'Rhodesian Ridgebacks',
+                      'Spaniels (English Cocker)',
+                      'Pointers (German Wirehaired)',
+                      'Old English Sheepdogs',
+                      'Irish Wolfhounds',
+                      'Setters (Irish)',
+                      'Greater Swiss Mountain Dogs',
+                      'Retrievers (Flat-Coated)',
+                      'Setters (Gordon)',
+                      'Pointers',
+                      'Afghan Hounds',
+                      'Black and Tan Coonhounds',
+                      'Greyhounds',
+                      'Redbone Coonhounds',
+                      'Entlebucher Mountain Dogs',
+                      'Scottish Deerhounds')) -> DogDataTidy
+DogDataTidy
+```
+
+
+
+
+
+
+
+
+
+
+
+
