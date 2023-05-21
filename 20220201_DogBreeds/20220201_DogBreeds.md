@@ -177,4 +177,4 @@ DogPlot(y='Greyhound') -> p8
   theme = theme(plot.title = element_text(size = 30)))
 ```
 
-![](20220201_DogBreeds_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+<img src="20220201_DogBreeds_files/figure-gfm/unnamed-chunk-7-1.png" width="2304" />

@@ -113,7 +113,7 @@ DogDataLong %>%
   filter(Breed == 'Greyhounds') %>%
 DogPlot(y='Greyhound') -> p8
 ```
-```{r fig.height=12, fig.width=24}
+```{r fig.height=12, fig.width=24, fig.retina = 2}
 (p7 | p2 | p5 | p1) /
 (p6 | p4 | p3 | p8) + plot_annotation(
   title = 'A Trait Comparison of Georgias Favorite Dog Breeds',
